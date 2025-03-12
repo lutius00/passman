@@ -1,16 +1,16 @@
 package com.passman.backend.controller
 
-import com.passman.backend.dto.PasswordRequestDTO
+import com.passman.backend.dto.PasswordCreateDTO
+import com.passman.backend.dto.PasswordUpdateDTO
 import com.passman.backend.model.PasswordModel
 import com.passman.backend.service.PasswordService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/passwords")
+@RequestMapping("/password")
 class PasswordController(
     private val passwordService: PasswordService,
 ) {
-
     @GetMapping
     fun getAllPasswords() = passwordService.getAllPasswords()
 
@@ -18,11 +18,14 @@ class PasswordController(
     fun getPasswordById(@PathVariable id: Long) = passwordService.getPasswordById(id)
 
     @PostMapping
-    fun createUser(@RequestBody passwordDTO: PasswordRequestDTO): PasswordModel = passwordService.createPassword(passwordDTO)
+    fun createPassword(@RequestBody passwordDTO: PasswordCreateDTO): PasswordModel = passwordService.createPassword(passwordDTO)
 
     @PutMapping("/{id}")
-    fun updatePassword(@PathVariable id: Long, @RequestBody updatedPassword: PasswordModel) = passwordService.updatePassword(id, updatedPassword)
+    fun updatePassword(@PathVariable id: Long, @RequestBody updatedPassword: PasswordUpdateDTO) = passwordService.updatePassword(id, updatedPassword)
 
     @DeleteMapping("/{id}")
     fun deletePassword(@PathVariable id: Long) = passwordService.deletePassword(id)
+
+    @GetMapping("/user/{id}")
+    fun getPasswordByUserId(@PathVariable id: Long) = passwordService.getPasswordsByUserId(id)
 }

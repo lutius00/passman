@@ -1,8 +1,8 @@
 package com.passman.backend.service
 
-import com.passman.backend.dto.PasswordRequestDTO
+import com.passman.backend.dto.PasswordCreateDTO
+import com.passman.backend.dto.PasswordUpdateDTO
 import com.passman.backend.model.PasswordModel
-import com.passman.backend.repository.OriginRepository
 import com.passman.backend.repository.PasswordRepository
 import com.passman.backend.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -11,28 +11,39 @@ import org.springframework.stereotype.Service
 class PasswordService(
     private val passwordRepository: PasswordRepository,
     private val userRepository: UserRepository,
-    private val originRepository: OriginRepository
 ) {
 
     fun getAllPasswords(): List<PasswordModel> = passwordRepository.findAll()
 
     fun getPasswordById(id: Long): PasswordModel? = passwordRepository.findById(id).orElse(null)
 
-    fun createPassword(passwordDTO: PasswordRequestDTO): PasswordModel {
+    fun createPassword(passwordDTO: PasswordCreateDTO): PasswordModel {
         val user = userRepository.findById(passwordDTO.userId).orElseThrow { throw RuntimeException("User not found")}
-        val origin = originRepository.findById(passwordDTO.originId).orElseThrow { throw RuntimeException("Origin not found")}
         val builtPassword = PasswordModel(
             user = user,
-            origin = origin,
-            password = passwordDTO.password
+            password = passwordDTO.password,
+            passwordURL = passwordDTO.passwordURL,
+            passwordOrigin = passwordDTO.passwordOrigin
         )
         return passwordRepository.save(builtPassword)
     }
 
-    fun updatePassword(id: Long, updatedPassword: PasswordModel): PasswordModel? {
+    fun updatePassword(id: Long, updatedPassword: PasswordUpdateDTO): PasswordModel? {
+        val user = userRepository.findById(updatedPassword.userId).orElseThrow { throw RuntimeException("User not found") }
+        val builtPassword = PasswordModel(
+            user = user,
+            password = updatedPassword.password,
+            passwordURL = updatedPassword.passwordURL,
+            passwordOrigin = updatedPassword.passwordOrigin
+        )
         return if (passwordRepository.existsById(id)) {
-            passwordRepository.save(updatedPassword.copy(id = id))
+            passwordRepository.save(builtPassword.copy(id = id))
         } else null
     }
     fun deletePassword(id: Long) = passwordRepository.deleteById(id)
+
+    fun getPasswordsByUserId(userId: Long): List<PasswordModel> {
+        val user = userRepository.findById(userId).orElseThrow { throw RuntimeException("User not found")}
+        return passwordRepository.findByUser(user)
+    }
 }

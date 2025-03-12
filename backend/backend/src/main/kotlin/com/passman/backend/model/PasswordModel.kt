@@ -9,15 +9,17 @@ data class PasswordModel(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @ManyToOne
+    @ManyToOne(cascade = [(CascadeType.DETACH)])
     @JoinColumn(name = "user_id", nullable = false)
     val user: UserModel,
 
-    @ManyToOne
-    @JoinColumn(name = "origin_id", nullable = false)
-    val origin: OriginModel,
-
     @Column
     val password: String,
+
+    @Column
+    val passwordURL: String,
+
+    @Column
+    val passwordOrigin: String,
 )
 

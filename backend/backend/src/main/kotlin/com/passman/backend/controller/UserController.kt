@@ -5,7 +5,7 @@ import com.passman.backend.service.UserService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 class UserController(private val userService: UserService) {
 
     @GetMapping
