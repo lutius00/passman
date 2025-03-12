@@ -33,5 +33,10 @@ class MainController {
         return "clicked :: result"
     }
 
-
+    @GetMapping("/passwords")
+    fun passwords(model: Model): String {
+        val passwords = listOf("Github: mypass123", "Google: pass456")
+        model.addAttribute("passwords", passwords)
+        return "password"
+    }
 }

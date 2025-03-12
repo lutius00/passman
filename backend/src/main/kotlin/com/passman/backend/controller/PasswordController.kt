@@ -4,15 +4,21 @@ import com.passman.backend.dto.PasswordCreateDTO
 import com.passman.backend.dto.PasswordUpdateDTO
 import com.passman.backend.model.PasswordModel
 import com.passman.backend.service.PasswordService
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/password")
 class PasswordController(
     private val passwordService: PasswordService,
 ) {
     @GetMapping
-    fun getAllPasswords() = passwordService.getAllPasswords()
+    fun getAllPasswords(model: Model): String {
+        val passwords = passwordService.getAllPasswords()
+        model.addAttribute("passwords", passwords)
+        return "password"
+    }
 
     @GetMapping("/{id}")
     fun getPasswordById(@PathVariable id: Long) = passwordService.getPasswordById(id)
