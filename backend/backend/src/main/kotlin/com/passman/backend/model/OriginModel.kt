@@ -14,7 +14,4 @@ data class OriginModel(
 
     @Column(nullable = false)
     val originUrl: String,
-
-    @OneToMany(mappedBy = "origin", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val passwords: List<PasswordModel> = mutableListOf()
 )

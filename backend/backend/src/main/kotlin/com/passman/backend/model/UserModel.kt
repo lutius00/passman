@@ -24,7 +24,4 @@ data class UserModel(
 
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
-
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val passwords: List<PasswordModel> = mutableListOf()
 )
