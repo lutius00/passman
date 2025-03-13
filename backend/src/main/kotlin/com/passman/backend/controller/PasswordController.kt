@@ -17,14 +17,19 @@ class PasswordController(
     fun getAllPasswords(model: Model): String {
         val passwords = passwordService.getAllPasswords()
         model.addAttribute("passwords", passwords)
-        return "password"
+        return "index"
     }
 
     @GetMapping("/{id}")
     fun getPasswordById(@PathVariable id: Long) = passwordService.getPasswordById(id)
 
     @PostMapping
-    fun createPassword(@RequestBody passwordDTO: PasswordCreateDTO): PasswordModel = passwordService.createPassword(passwordDTO)
+    fun createPassword(@ModelAttribute passwordDTO: PasswordCreateDTO, model: Model): String {
+        passwordService.createPassword(passwordDTO)
+        val passwords = passwordService.getAllPasswords()
+        model.addAttribute("passwords", passwords)
+        return "index"
+    }
 
     @PutMapping("/{id}")
     fun updatePassword(@PathVariable id: Long, @RequestBody updatedPassword: PasswordUpdateDTO) = passwordService.updatePassword(id, updatedPassword)

@@ -1,39 +1,55 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Htmx Demo</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" >
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PASSMAN</title>
     <script src="https://unpkg.com/htmx.org@2.0.1"></script>
-</head>
-<body>
-<main class="container">
-    <section>
-        <h1>Htmx Demo</h1>
-        <div id="parent-div"></div>
-        <button hx-post="/clicked"
-                hx-trigger="click"
-                hx-target="#parent-div"
-                hx-swap="outerHTML">
-            Click Me!
-        </button>
-    </section>
+  </head>
+  <body>
+    <h1 class="title">PASSMAN</h1>
+    <div>
+      <div th:each="password : ${passwords}" th:text="${password.passwordOrigin} + ' ' + ${password.password}" th:class="password-box"></div>
+    </div>
 
-    <section>
-        <input type="text"
-               name="q"
-               hx-get="/search"
-               hx-trigger="keyup changed delay:500ms"
-               hx-target="#search-results"
-               placeholder="Search..."
-        >
-        <div th:replace="search::results">
-        </div>
-    </section>
-
-</main>
-</body>
+    <div class="form-container">
+      <form hx-post="/password" hx-trigger="submit" hx-target="body" id="password-form">
+        <label for="userId">UserId: </label>
+        <select id="userId" name="userId" required>
+          <option>1</option>
+        </select>
+        <label for="password">Password: </label>
+        <input type="text" name="password" id="password" required />
+        <label for="originName">Password Origin: </label>
+        <input type="text" name="passwordOrigin" id="originName" required />
+        <label for="passwordURL">Origin URL: </label>
+        <input type="text" name="passwordURL" id="passwordURL" required />
+        <button type="submit">NEW PASSWORD</button>
+      </form>
+    </div>
+  </body>
+  <style>
+    body {
+      background-color: gray;
+    }
+    .title {
+      text-align: center;
+    }
+    .password-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+    .form-container {
+      margin-top: 5rem;
+      display: flex;
+      justify-content: center;
+    }
+    #password-form {
+      width: 20rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  </style>
 </html>
